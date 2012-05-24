@@ -22,6 +22,7 @@ public class GotoAndPlay implements ApplicationListener {
 	float yspeed = 0;
 	float friction = 0.95f;
 	float gravity = 0.1f;
+	float thrust = 0.75f;
 	
 	@Override
 	public void create() {
@@ -62,10 +63,10 @@ public class GotoAndPlay implements ApplicationListener {
 			xspeed += power * Gdx.graphics.getDeltaTime();
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN)){
-			yspeed -= power * Gdx.graphics.getDeltaTime();
+			yspeed -= power * thrust * Gdx.graphics.getDeltaTime();
 		}
 		if(Gdx.input.isKeyPressed(Keys.UP)){
-			yspeed += power * Gdx.graphics.getDeltaTime();
+			yspeed += power * thrust * Gdx.graphics.getDeltaTime();
 		}
 		xspeed *= friction;
 		yspeed -= gravity;
