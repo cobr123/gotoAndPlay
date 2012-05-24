@@ -16,6 +16,9 @@ public class GotoAndPlay implements ApplicationListener {
 	
 	Camera camera;
 	SpriteBatch batch;
+	float power = 20;
+	float xspeed = 0;
+	float yspeed = 0;
 	
 	@Override
 	public void create() {
@@ -50,17 +53,19 @@ public class GotoAndPlay implements ApplicationListener {
 		batch.end();
 		
 		if(Gdx.input.isKeyPressed(Keys.LEFT)){
-			hero.x -= 200 * Gdx.graphics.getDeltaTime();
+			xspeed -= power * Gdx.graphics.getDeltaTime();
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT)){
-			hero.x += 200 * Gdx.graphics.getDeltaTime();
+			xspeed += power * Gdx.graphics.getDeltaTime();
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN)){
-			hero.y -= 200 * Gdx.graphics.getDeltaTime();
+			yspeed -= power * Gdx.graphics.getDeltaTime();
 		}
 		if(Gdx.input.isKeyPressed(Keys.UP)){
-			hero.y += 200 * Gdx.graphics.getDeltaTime();
+			yspeed += power * Gdx.graphics.getDeltaTime();
 		}
+		hero.x += xspeed;
+		hero.y += yspeed;
 	}
 
 	@Override
