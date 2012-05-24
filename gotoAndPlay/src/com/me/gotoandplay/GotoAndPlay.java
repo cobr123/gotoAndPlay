@@ -28,6 +28,7 @@ public class GotoAndPlay implements ApplicationListener {
 	float friction = 0.95f;
 	float gravity = 0.1f;
 	float upconstant = 0.75f;
+	float downconstant = 0.96f;
 	float wind = 0.1f;
 	int score = 0;
 
@@ -83,21 +84,61 @@ public class GotoAndPlay implements ApplicationListener {
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
 			yspeed += power * upconstant * Gdx.graphics.getDeltaTime();
 		}
-		xspeed += wind;
+		//xspeed += wind;
 		xspeed *= friction;
 		yspeed -= gravity;
 
+		if (hero.x < 0){
+			xspeed = -xspeed;
+			hero.x = 0;
+		}
+		if (hero.y < 0){
+			yspeed = -yspeed;
+			hero.y = 0;
+		}
+		if (hero.x + hero.width > camera.viewportWidth){
+			xspeed = -xspeed;
+			hero.x = camera.viewportWidth - hero.width;
+		}
+		if (hero.y + hero.height > camera.viewportHeight){
+			yspeed = -yspeed;
+			hero.y = camera.viewportHeight - hero.height;
+		}
+//		if(yspeed > 0){
+//			yspeed *= downconstant;
+//		}
+//		if(yspeed < 1.1 && yspeed > 0.4 && hero.y == 0){
+//			System.out.println(yspeed + " " + hero.y);
+//			yspeed = 0;
+//			hero.y = 0;
+//		}
 		hero.x += xspeed;
 		hero.y += yspeed;
-
-		if (hero.x < 0 || hero.x > camera.viewportWidth || hero.y < 0
-				|| hero.y > camera.viewportHeight) {
-			xspeed = 0;
-			yspeed = 0;
-			hero.x = 800 / 2 - 48 / 2;
-			hero.y = 400;
-			score -= 2;
-		}
+//
+//		if (hero.x < 0 || hero.x > camera.viewportWidth || hero.y < 0
+//				|| hero.y > camera.viewportHeight) {
+//			xspeed = 0;
+//			yspeed = 0;
+//			hero.x = 800 / 2 - 48 / 2;
+//			hero.y = 400;
+//			score -= 2;
+//		}
+//		if (hero.x < 0){
+//			xspeed = 0;
+//			hero.x = 0;
+//		}
+//		if (hero.y < 0){
+//			yspeed = 0;
+//			hero.y = 0;
+//		}
+//		if (hero.x + hero.width > camera.viewportWidth){
+//			xspeed = 0;
+//			hero.x = camera.viewportWidth - hero.width;
+//		}
+//		if (hero.y + hero.height > camera.viewportHeight){
+//			yspeed = 0;
+//			hero.y = camera.viewportHeight - hero.height;
+//		}
 		if (hero.contains(coin.x + 8, coin.y + 8)) {
 			coin.x = (float) (Math.random() * 400 + 50);
 			++score;
