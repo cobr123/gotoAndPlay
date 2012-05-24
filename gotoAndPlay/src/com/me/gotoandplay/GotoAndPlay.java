@@ -21,6 +21,7 @@ public class GotoAndPlay implements ApplicationListener {
 	float xspeed = 0;
 	float yspeed = 0;
 	float friction = 0.95f;
+	float gravity = 0.1f;
 	
 	@Override
 	public void create() {
@@ -33,7 +34,7 @@ public class GotoAndPlay implements ApplicationListener {
 		
 		hero = new Rectangle();
 		hero.x = 800 / 2 - 48 / 2;
-		hero.y = 20;
+		hero.y = 400;
 		hero.width = 32;
 		hero.height = 32;
 	}
@@ -67,7 +68,7 @@ public class GotoAndPlay implements ApplicationListener {
 			yspeed += power * Gdx.graphics.getDeltaTime();
 		}
 		xspeed *= friction;
-		yspeed *= friction;
+		yspeed -= gravity;
 		
 		hero.x += xspeed;
 		hero.y += yspeed;
