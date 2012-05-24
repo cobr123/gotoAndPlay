@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+//http://www.gotoandplay.it/_articles/2007/02/game_tutorial_part1.php
 public class GotoAndPlay implements ApplicationListener {
 	Texture heroImage;
 	Rectangle hero;
@@ -19,6 +20,7 @@ public class GotoAndPlay implements ApplicationListener {
 	float power = 20;
 	float xspeed = 0;
 	float yspeed = 0;
+	float friction = 0.95f;
 	
 	@Override
 	public void create() {
@@ -64,6 +66,9 @@ public class GotoAndPlay implements ApplicationListener {
 		if(Gdx.input.isKeyPressed(Keys.UP)){
 			yspeed += power * Gdx.graphics.getDeltaTime();
 		}
+		xspeed *= friction;
+		yspeed *= friction;
+		
 		hero.x += xspeed;
 		hero.y += yspeed;
 	}
