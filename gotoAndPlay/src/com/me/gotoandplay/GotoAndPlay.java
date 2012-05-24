@@ -23,6 +23,7 @@ public class GotoAndPlay implements ApplicationListener {
 	float friction = 0.95f;
 	float gravity = 0.1f;
 	float thrust = 0.75f;
+	float wind = 0.1f;
 	
 	@Override
 	public void create() {
@@ -68,6 +69,7 @@ public class GotoAndPlay implements ApplicationListener {
 		if(Gdx.input.isKeyPressed(Keys.UP)){
 			yspeed += power * thrust * Gdx.graphics.getDeltaTime();
 		}
+		xspeed += wind;
 		xspeed *= friction;
 		yspeed -= gravity;
 		
