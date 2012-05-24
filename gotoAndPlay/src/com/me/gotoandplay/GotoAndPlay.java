@@ -83,6 +83,12 @@ public class GotoAndPlay implements ApplicationListener {
 		hero.x += xspeed;
 		hero.y += yspeed;
 
+	    if (hero.x < 0 || hero.x > camera.viewportWidth || hero.y < 0 || hero.y > camera.viewportHeight) {
+	        xspeed = 0;
+	        yspeed = 0;
+			hero.x = 800 / 2 - 48 / 2;
+			hero.y = 400;
+	    }
 		if (hero.contains(coin.x + 8, coin.y + 8)) {
 			coin.x = (float) (Math.random() * 400 + 50);
 		}
