@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -36,12 +35,14 @@ public class GotoAndPlay implements ApplicationListener {
 	float downconstant = 0.96f;
 	float wind = 0.1f;
 	int score = 0;
+	float lastTime = 0;
+	final float KEY_UPDATE_PERIOD = 0.1f;
 
 	@Override
 	public void create() {
 		coinImage = new Texture(Gdx.files.internal("coin.png"));
 		heroImage = new Texture(Gdx.files.internal("hero.png"));
-		
+
 		font = new BitmapFont();
 		font.setScale(2);
 
@@ -69,7 +70,7 @@ public class GotoAndPlay implements ApplicationListener {
 				}
 
 				if (msg.type == MsgType.REMOVE) {
-					Remove remove = (Remove) object;
+					Remove remove = (Remove) msg.data;
 					Player player = getPlayer(remove.playerId);
 					if (player != null)
 						players.remove(player);
@@ -81,18 +82,19 @@ public class GotoAndPlay implements ApplicationListener {
 			}
 		});
 
-        Network.register(client.getKryo());
-        client.start();
-        connect();
+		Network.register(client.getKryo());
+		client.start();
+		connect();
 	}
 
-    public void connect() {
-       try {
-          client.connect(8000, "localhost", Network.port);
-       } catch (IOException ex) {
-          throw new RuntimeException(ex);
-       }
-    }
+	public void connect() {
+		try {
+			client.connect(8000, "localhost", Network.port);
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 	private Player getPlayer(int id) {
 		for (Player player : players)
 			if (player.id == id)
@@ -120,18 +122,23 @@ public class GotoAndPlay implements ApplicationListener {
 		}
 		font.draw(batch, String.valueOf(score), 10, camera.viewportHeight - 10);
 		batch.end();
-		
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			sendKey(Keys.LEFT, Gdx.graphics.getDeltaTime());
-		}
-		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			sendKey(Keys.RIGHT, Gdx.graphics.getDeltaTime());
-		}
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			sendKey(Keys.DOWN, Gdx.graphics.getDeltaTime());
-		}
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			sendKey(Keys.UP, Gdx.graphics.getDeltaTime());
+
+		lastTime += Gdx.graphics.getDeltaTime();
+
+		if (lastTime >= 0.1) {
+			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+				sendKey(Keys.LEFT, Gdx.graphics.getDeltaTime());
+			}
+			if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+				sendKey(Keys.RIGHT, Gdx.graphics.getDeltaTime());
+			}
+			if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+				sendKey(Keys.DOWN, Gdx.graphics.getDeltaTime());
+			}
+			if (Gdx.input.isKeyPressed(Keys.UP)) {
+				sendKey(Keys.UP, Gdx.graphics.getDeltaTime());
+			}
+			lastTime = 0;
 		}
 	}
 
@@ -139,7 +146,7 @@ public class GotoAndPlay implements ApplicationListener {
 		if (!client.isConnected()) {
 			return;
 		}
-		//System.out.println("keyCode="+keyCode);
+		// System.out.println("keyCode="+keyCode);
 		Key key = new Key();
 		key.delta = delta;
 		key.keyCode = keyCode;

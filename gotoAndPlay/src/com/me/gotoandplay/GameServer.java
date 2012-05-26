@@ -49,7 +49,10 @@ public class GameServer extends Server {
 
 				Remove remove = new Remove();
 				remove.playerId = connection.getID();
-				sendToAllTCP(remove);
+				Message msg = new Message();
+				msg.type = MsgType.REMOVE;
+				msg.data = remove;
+				sendToAllTCP(msg);
 			}
 
 			public void received(Connection connection, Object object) {
